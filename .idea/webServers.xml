@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="772e0915-d3b1-4f40-96ce-b9c1e120bd94" name="aws" url="http://13.231.80.124">
+        <fileTransfer host="13.231.80.124" port="22" privateKey="$PROJECT_DIR$/../aws-Lightsail/LightsailDefaultPrivateKey-ap-northeast-1.pem" rootFolder="/home/bitnami/htdocs" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
