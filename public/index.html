@@ -3,20 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
 </head>
 <body>
 
+<div>
+    <p>弁護士検索API</p>
 <form action="/api/top" method="post">
-
-<label for='lowerid'>弁護士番号</label>
-<input type='text' name='lowerid' id='lowerid' placeholder='0123456'>
-
-<button id='sendBtn'>APIに問い合わせる</button>
+    <label for='lowerid'>弁護士番号</label>
+    <input type='text' name='lowerid' id='lowerid' placeholder='0123456'>
 
 </form>
-
+<button id='sendBtn'>APIに問い合わせる</button>
 
 <div id='response'></div>
+</div>
+
+<hr>
+
+<div>
+    <p>銀行情報検索API</p>
+    <form>
+        <input type="text" id="bank_code" placeholder="0001" max="9999" maxlength="4" min="0" autofocus>
+        <input type="text" id="bank_name" placeholder="みずほ" disabled>
+        <input type="text" id="branch_code" placeholder="001" maxlength="3" min="0" max="999">
+        <input type="text" id="branch_name" placeholder="東京営業部" disabled>
+    </form>
+
+</div>
+
+
+
 
 </body>
 </html>
+
+
+<script type="text/javascript">
+
+    document.getElementById('sendBtn').addEventListener('click', postApi)
+    function postApi(event) {
+        let lowerid = document.getElementById('lowerid').value
+        $.ajax({
+            type: 'POST',
+            url: '/api/top',
+            data: {lowerid: lowerid}
+        }).done(function (data) {
+           $('#response').append(JSON.stringify(data))
+        });
+    }
+
+
+    $(function(){
+        // handling bank code
+        $('#bank_code').keyup(function(e){
+
+            if (!((48 <= e.keyCode && e.keyCode <= 57) || e.keyCode == 91 || e.keyCode == 17)) { // 0 - 9, cmd, ctrl
+                return;
+            }
+
+            $('#bank_name').val('').attr('placeholder', ''); // empty
+
+            bank_code = $('#bank_code').val();
+
+            if (bank_code.length != 4) {
+                return;
+            }
+
+            $.getJSON("https://bank.teraren.com/banks/" + bank_code + ".json", function(json){
+                $('#bank_name').val(json.name);
+            }).error(function(jqXHR, textStatus, errorThrown) {
+                $('#bank_name').val('');
+            });
+
+        });
+
+
+        // handling bank branch code
+        $('#branch_code').keyup(function(e){
+
+            if (!(48 <= e.keyCode && e.keyCode <= 57)) { // 0 - 9
+                return;
+            }
+
+            $('#branch_name').val('').attr('placeholder', ''); // empty
+
+            bank_code = $('#bank_code').val();
+            bank_branch = $('#branch_code').val();
+
+            if (bank_code.length != 4) {
+                return;
+            }
+
+            if (bank_branch.length != 3) {
+                return;
+            }
+
+            $.getJSON("http://bank.teraren.com/banks/" + bank_code + "/branches/"+bank_branch+".json", function(json){
+                $('#branch_name').val(json.name);
+            }).error(function(jqXHR, textStatus, errorThrown) {
+                $('#branch_name').val('').attr('placeholder', ''); // empty
+            });
+
+        });
+    });
+
+</script>
