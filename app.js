@@ -29,12 +29,10 @@ app.post('/api/top', function (req, res, callback) {
             'org.apache.struts.taglib.html.TOKEN': token
         }
 
-        let cooki = response.headers['set-cookie']
-
         let headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0',
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Cookie': cooki
+            'Cookie': response.headers['set-cookie']
         };
 
         request.post({url: URL_SEARCH_DETAIL, form: formdata, headers: headers}, function (e, r, body) {

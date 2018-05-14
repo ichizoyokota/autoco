@@ -52,11 +52,13 @@
             url: '/api/top',
             data: {lowerid: lowerid}
         }).done(function (data) {
+           $('#response').empty()
            $('#response').append(JSON.stringify(data))
         });
     }
 
 
+    //これはAPI提供者のサンプル・・・。作り直し。
     $(function(){
         // handling bank code
         $('#bank_code').keyup(function(e){
