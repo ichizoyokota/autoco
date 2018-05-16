@@ -36,8 +36,72 @@
 </div>
 
 
+<h2 id="a3">テスト（サンドボックス）用クレジットカード</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>項目</th>
+        <th>値</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>クレジットカード番号</td>
+        <td>4444-3333-2222-1111</td>
+    </tr>
+    <tr>
+        <td>有効期限</td>
+        <td>現在より未来の任意の年月を指定してください。</td>
+    </tr>
+    <tr>
+        <td>CVC</td>
+        <td>任意の3桁か4桁の値を入力してください。</td>
+    </tr>
+    </tbody>
+</table>
+
+<button id="customButton">カスタム</button>
 
 
+<script src="https://checkout.spike.cc/v1/checkout.js"></script>
+<script>
+
+    // SPIKE Checkoutのインスタンスを生成する
+    var handler = SpikeCheckout.configure({
+        key: "pk_test_uAvQJvNxZ7d6Am5L4thJn4nG",
+        token: function(token) {
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name', 'card_token')
+                .val(token.id)
+                .appendTo('form');
+            $('form').submit();
+        },
+        opened: function(e) {
+
+            console.log('opened')
+            console.log(e)
+            // Window opened event
+        },
+        closed: function(e) {
+            console.log('closed')
+            console.log(e)
+            // Window closed event
+        }
+    });
+
+
+    // カード情報を入力するオーバーレイを開く処理
+    document.getElementById("customButton").addEventListener("click", function(e) {
+        handler.open({
+            name: "オンラインショップ",
+            currency: "JPY",
+            email: "foo@example.com",
+        });
+        e.preventDefault();
+    });
+</script>
 </body>
 </html>
 
@@ -56,6 +120,17 @@
            $('#response').append(JSON.stringify(data))
         });
     }
+
+
+    document.getElementById("customButton").addEventListener("click", function(e) {
+        handler.open({
+            name: "オンラインショップ",
+            currency: "JPY",
+            guest: true,
+            email: "yokota@yeees.in",
+        });
+        e.preventDefault();
+    });
 
 
     //これはAPI提供者のサンプル・・・。作り直し。
